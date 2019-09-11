@@ -45,6 +45,14 @@ export interface IProduct {
 
 export interface IPendingCustomer {
     _id: string;
+    firstName: string;
+    lastName: string;
+    street: string;
+    houseNumber: string;
+    postalCode: string;
+    city: string;
+    country: string;
+    password: string;
     email: string;
     token: string;
     date: number;

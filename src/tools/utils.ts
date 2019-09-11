@@ -3,10 +3,12 @@ import * as hashJS from "hash.js";
 import http from "http";
 import path from "path";
 import * as crypt from "./crypt";
+import * as models from '../models/models';
 
 const alphabet: string = "4fPwKEjkGrBJst2MpFVZx9y5lIm6A7LDinQzgOhqaWC3obXuv0H1cNde8Y";
 const config: any = JSON.parse(fs.readFileSync(path.join(__dirname, "../", "../", "/config.json"), "utf-8"));
 const secret: string = config.secret;
+export const adresses: any = config.adresses;
 export const wsKey: string = config.wsKey;
 
 export function randomString(length: number): string {
@@ -108,4 +110,21 @@ export function triggerUpdateHook(product: any) {
     });
     req.write(JSON.stringify(product));
     req.end();
+}
+
+export function verifyCustomerData(customer: models.IPendingCustomer): boolean {
+    if (!customer.city || typeof customer.city !== "string" ||
+        !customer.country || typeof customer.country !== "string" ||
+        !customer.date || typeof customer.date !== "number" ||
+        !customer.email || typeof customer.email !== "string" ||
+        !customer.firstName || typeof customer.firstName !== "string" ||
+        !customer.houseNumber || typeof customer.houseNumber !== "string" ||
+        !customer.lastName || typeof customer.lastName !== "string" ||
+        !customer.password || typeof customer.password !== "string" ||
+        !customer.postalCode || typeof customer.postalCode !== "string" ||
+        !customer.street || typeof customer.street !== "string" ||
+        !customer.token || typeof customer.token !== "string") {
+        return false;
+    }
+    return true;
 }

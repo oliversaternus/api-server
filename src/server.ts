@@ -6,6 +6,9 @@ import * as models from "./models/models";
 import * as auth from "./tools/auth";
 import * as mongo from "./tools/mongo";
 import * as utils from "./tools/utils";
+import Templates from "./tools/templates";
+
+const templates = new Templates();
 
 const app: express.Application = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -254,6 +257,64 @@ app.put("/api/customers/purchase",
         const success = await mongo.purchase(customer._id);
         res.sendStatus(success ? 200 : 500);
     });
+
+/*
+*
+*
+*
+************************************ PENDING CUSTOMERS **************************************
+*
+*
+*
+*/
+
+// Create pending customer
+app.put("/api/pending",
+    async (req, res) => {
+        const pendingCustomer: models.IPendingCustomer = req.body as models.IPendingCustomer;
+        pendingCustomer._id = null;
+        pendingCustomer.token = utils.generateId();
+        if (!utils.verifyCustomerData(pendingCustomer)) {
+            res.sendStatus(400);
+            return;
+        }
+        const created = await mongo.createPendingCustomer(pendingCustomer);
+        created ? res.status(200).send(created) : res.sendStatus(400);
+    });
+
+// Accept pending customer
+app.put("/api/pending/:id/:token",
+    async (req, res) => {
+        const { id, token } = req.params;
+        const pendingCustomer = await mongo.getPendingCustomer(id);
+        if (pendingCustomer.token !== token) {
+            res.sendStatus(401);
+            return
+        }
+        delete pendingCustomer.token;
+        const customer: models.ICustomer = {
+            ...pendingCustomer,
+            sessionTokens: [],
+            cart: [],
+            purchased: []
+        };
+        await mongo.createCustomer(customer);
+        await mongo.deletePendingCustomer(id);
+        res.status(200).send(templates.list['ACCOUNT_CREATED']({
+            customer: customer.firstName + " " + customer.lastName,
+            loginLink: "http://localhost:8989/static/test.html"
+        }));
+    });
+
+/*
+*
+*
+*
+************************************ CONNECTIONS **************************************
+*
+*
+*
+*/
 
 app.use((err: any, req: any, res: any, next: any) => {
     res.status(Number(err.message) || 500);

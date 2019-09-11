@@ -18,9 +18,17 @@ let config = {
     secret: randomString(24),
     encryptionKey: randomString(32),
     wsKey: randomString(24),
+    adresses: {
+        emailServer: "http://localhost:8787",
+        staticServer: "http://localhost:8989",
+        fileServer: "http://localhost:8888",
+        apiServer: "http://localhost:8080",
+        streamingServer: "http://localhost:8686",
+        webSocketServer: "http://localhost:8585"
+    },
     superAdmin: {
         _id: null,
-        name: 'superUser',
+        name: 'superAdmin',
         access: 'super',
         password: randomString(24),
         sessionTokens: []

@@ -250,7 +250,7 @@ export async function removeAdminSessionToken(id: string, token: string): Promis
 *
 */
 
-export async function createPendingCustomer(customer: models.IPendingCustomer): Promise<boolean> {
+export async function createPendingCustomer(customer: models.IPendingCustomer): Promise<models.IPendingCustomer> {
     const res = await conn.db("express-shop").collection("pending_customers")
         .insertOne(customer);
     return res.ops[0];
