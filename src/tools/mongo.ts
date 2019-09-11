@@ -166,6 +166,13 @@ export async function updateProduct(product: models.IProduct): Promise<boolean> 
     return res;
 }
 
+export async function setProductMainImage(id: string, mainImage: string): Promise<boolean> {
+    const _id = new ObjectID(id);
+    const res = await conn.db("express-shop").collection("products")
+        .updateOne({ _id }, { mainImage });
+    return !!res.result.nModified;
+}
+
 export async function addProductImage(id: string, image: string): Promise<boolean> {
     const _id = new ObjectID(id);
     const res = await conn.db("express-shop").collection("products")
