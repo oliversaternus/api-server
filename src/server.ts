@@ -136,39 +136,6 @@ app.post("/api/products",
         res.status(200).send(products);
     });
 
-// Add product mainImage
-app.post("/api/products/:id/images/:fileName",
-    auth.verifyAdmin,
-    async (req, res) => {
-        const { id, fileName } = req.params;
-
-        // update database
-        const success = await mongo.setProductMainImage(id, fileName);
-        res.sendStatus(200);
-    });
-
-// Add product image
-app.post("/api/products/:id/images/:fileName",
-    auth.verifyAdmin,
-    async (req, res) => {
-        const { id, fileName } = req.params;
-
-        // update database
-        const success = await mongo.addProductImage(id, fileName);
-        res.sendStatus(200);
-    });
-
-// Remove product image
-app.delete("/api/products/:id/:fileName",
-    auth.verifyAdmin,
-    async (req, res) => {
-        const { id, fileName } = req.params;
-
-        // update database
-        const success = await mongo.removeProductImage(id, fileName);
-        res.sendStatus(200);
-    });
-
 /*
 *
 *

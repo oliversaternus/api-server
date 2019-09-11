@@ -166,27 +166,6 @@ export async function updateProduct(product: models.IProduct): Promise<boolean> 
     return res;
 }
 
-export async function setProductMainImage(id: string, mainImage: string): Promise<boolean> {
-    const _id = new ObjectID(id);
-    const res = await conn.db("express-shop").collection("products")
-        .updateOne({ _id }, { mainImage });
-    return !!res.result.nModified;
-}
-
-export async function addProductImage(id: string, image: string): Promise<boolean> {
-    const _id = new ObjectID(id);
-    const res = await conn.db("express-shop").collection("products")
-        .updateOne({ _id }, { $push: { images: image } });
-    return !!res.result.nModified;
-}
-
-export async function removeProductImage(id: string, image: string): Promise<boolean> {
-    const _id = new ObjectID(id);
-    const res = await conn.db("express-shop").collection("products")
-        .updateOne({ _id }, { $pull: { images: image } });
-    return !!res.result.nModified;
-}
-
 export async function getProducts(categories: models.ISearchCategories): Promise<models.IProduct[]> {
     const page = categories.page || 0;
     const pageSize = categories.pageSize || 1000;
