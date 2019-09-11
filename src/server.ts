@@ -1,11 +1,7 @@
 import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
-import fileUpload, { UploadedFile } from "express-fileupload";
-import { unlink } from "fs";
 import { createServer } from "http";
-import path from "path";
-import util from "util";
 import * as models from "./models/models";
 import * as auth from "./tools/auth";
 import * as mongo from "./tools/mongo";
@@ -14,7 +10,6 @@ import * as utils from "./tools/utils";
 const app: express.Application = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(fileUpload());
 app.use(cors());
 
 /*
