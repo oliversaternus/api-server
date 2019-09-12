@@ -5,8 +5,9 @@ import { createServer } from "http";
 import * as models from "./models/models";
 import * as auth from "./tools/auth";
 import * as mongo from "./tools/mongo";
-import * as utils from "./tools/utils";
+import * as service from "./tools/service";
 import Templates from "./tools/templates";
+import * as utils from "./tools/utils";
 
 const templates = new Templates();
 
@@ -279,7 +280,16 @@ app.put("/api/pending",
             return;
         }
         const created = await mongo.createPendingCustomer(pendingCustomer);
-        created ? res.status(200).send(created) : res.sendStatus(400);
+        const sentMail = await service.sendMail(
+            "NEW_ACCOUNT",
+            {
+                customer: pendingCustomer.firstName + " " + pendingCustomer.lastName,
+                verifycationLink: pendingCustomer.token
+            },
+            pendingCustomer.email,
+            "Verify your Account"
+        );
+        (created && sentMail) ? res.status(200).send(created) : res.sendStatus(400);
     });
 
 // Accept pending customer
