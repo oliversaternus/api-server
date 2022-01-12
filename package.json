@@ -33,7 +33,7 @@
     "express-fileupload": "^1.1.6",
     "handlebars": "^4.7.3",
     "hash.js": "^1.1.7",
-    "markdown-it": "^9.0.1",
+    "markdown-it": "^12.3.2",
     "mongodb": "^3.2.7",
     "node-fetch": "^2.6.0",
     "node-mailer": "^0.1.1",
